@@ -2,6 +2,7 @@ package com.rest.webservices.restfulwebservice.controllers;
 
 import com.rest.webservices.restfulwebservice.beans.User;
 import com.rest.webservices.restfulwebservice.daos.UserDaoService;
+import com.rest.webservices.restfulwebservice.entities.UserEntity;
 import com.rest.webservices.restfulwebservice.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
@@ -29,7 +30,7 @@ public class UserResource {
     private UserDaoService service;
 
     @GetMapping("/users")
-    public List<User> retrieveAllUsers() {
+    public List<UserEntity> retrieveAllUsers() {
         return this.service.findAll();
     }
 

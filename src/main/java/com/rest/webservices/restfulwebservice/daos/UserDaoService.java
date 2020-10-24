@@ -1,55 +1,48 @@
 package com.rest.webservices.restfulwebservice.daos;
 
 import com.rest.webservices.restfulwebservice.beans.User;
+import com.rest.webservices.restfulwebservice.entities.UserEntity;
+import com.rest.webservices.restfulwebservice.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 @Component
 public class UserDaoService {
-    public static List<User> users = new ArrayList<>();
 
-    private static int usersCount = 3;
+    @Autowired
+    private UserRepository repository;
 
-    static {
-        users.add(new User(1, "Adam", new Date()));
-        users.add(new User(2, "Eve", new Date()));
-        users.add(new User(3, "Jack", new Date()));
-    }
-
-    public List<User> findAll() {
-        return users;
+    public List<UserEntity> findAll() {
+        return repository.findAll();
     }
 
     public User save(User user) {
-        if(user.getId() == null) {
-            user.setId(++usersCount);
-        }
-        users.add(user);
+        UserEntity userEntity = new UserEntity(user);
+        repository.save(userEntity);
         return user;
     }
 
+    public User update(User user) {
+        UserEntity userEntity = new UserEntity(user);
+        repository.save(userEntity);
+        return user;
+    }
+
+    public void delete(int id) {
+        UserEntity entity = repository.getOne(id);
+        repository.delete(entity);
+    }
+
     public User findOne(int id) {
-        for (User user:users) {
-            if (user.getId()==id){
-                return user;
-            }
-        }
-        return null;
+        UserEntity userEntity = repository.getOne(id);
+        return userEntity.toUserBean();
     }
 
     public User deleteById(int id) {
-        Iterator<User> iterator = users.iterator();
-        while (iterator.hasNext()) {
-            User user = iterator.next();
-            if (user.getId() == id) {
-                iterator.remove();
-                return user;
-            }
-        }
-        return null;
+        UserEntity entity = repository.getOne(id);
+        repository.delete(entity);
+        return entity.toUserBean();
     }
 }
